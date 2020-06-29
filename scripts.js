@@ -41,7 +41,16 @@ function scrub(e) {
 };
 
 function toggleFullscreen() {
-  video.requestFullscreen();
+  // video.requestFullscreen();
+  let elem = document.querySelector("video");
+
+  if (!document.fullscreenElement) {
+    elem.requestFullscreen().catch(err => {
+      alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name}`);
+    });
+  } else {
+    document.exitFullscreen();
+  };
 };
 
 
