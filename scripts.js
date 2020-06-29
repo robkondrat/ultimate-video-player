@@ -8,7 +8,60 @@ const toggle = player.querySelector('.toggle');
 const skipButtons = player.querySelectorAll('[data-skip]');
 const ranges = player.querySelectorAll('.player__slider');
 const fullscreen = player.querySelector('.fullscreen');
+const cloudinaryButton = document.getElementById("cloudinary_button")
 
+// user upload video functionality
+// const uploadWidget = cloudinary.createUploadWidget(
+//   {
+//     cloudName: "robkondrat",
+//     tags: ["video"],
+//     resourceType: "video",
+//     multiple: false,
+//     clientAllowedFormats: ["mp4", "mov"],
+//     uploadPreset: "tycwqdaj"
+//   },
+//   function(error, result) {
+//     if (!error && result.event === "success") {
+//       video.src = result.info.url;
+//       console.log(result);
+//       let li = document.createElement("li");
+//       li.innerHTML = result.info.created_at;
+//       const att = document.createAttribute("id");
+//       att.value = result.info.url;
+//       li.setAttributeNode(att);
+//       li.addEventListener("click", loadVideo);
+//       list.prepend(li);
+//       this.close();
+//     }
+//   }
+// );
+
+// function getVideos() {
+//   fetch("https://res.cloudinary.com/robkondrat/video/list/video.json")
+//     .then(response => response.json())
+//     .then(data => addVideos(data.resources));
+// };
+
+// function addVideos(videos) {
+//   console.log(videos);
+//   videos.forEach(video => {
+//     let li = document.createElement("li");
+//     li.innerHTML = video.created_at;
+//     const att = document.createAttribute("id");
+//     att.value = `https://res.cloudinary.com/robkondrat/video/upload/v${video.version}/${video.public_id}.${video.format}`;
+//     li.setAttributeNode(att);
+//     li.addEventListener("click", loadVideo);
+//     list.appendChild(li);
+//   });
+// };
+
+// function loadVideo(event) {
+//   video.src = event.target.id;
+//   video.play();
+//   console.log(event);
+// };
+
+// JS 30 functions
 function togglePlay() {
   if (video.paused) {
     video.play();
@@ -40,6 +93,7 @@ function scrub(e) {
   video.currentTime = scrubTime;
 };
 
+// required function for voice command
 function toggleFullscreen() {
   // video.requestFullscreen();
   let elem = document.querySelector("video");
@@ -72,6 +126,10 @@ progress.addEventListener('click', scrub);
 progress.addEventListener('mousemove', (e) => mousedown && scrub(e));
 progress.addEventListener('mousedown', () => mousedown = true);
 progress.addEventListener('mouseup', () => mousedown = false);
+
+// cloudinaryButton.addEventListener("click", () => {
+//   uploadWidget.open();
+// }, false);
 
 
 // voice command
