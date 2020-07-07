@@ -2,18 +2,19 @@ window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogn
 
 const player = document.querySelector('.player');
 const video = player.querySelector('.viewer');
+// const canvas = document.querySelector('.photo');
+// const ctx = canvas.getContext('2d');
 const progress = player.querySelector('.progress');
 const progressBar = player.querySelector('.progress__filled');
 const toggle = player.querySelector('.toggle');
 const skipButtons = player.querySelectorAll('[data-skip]');
 const ranges = player.querySelectorAll('.player__slider');
 const fullscreen = player.querySelector('.fullscreen');
-const cloudinaryButton = document.getElementById("cloudinary_button")
+// const cloudinaryButton = document.getElementById("cloudinary_button");
 
-// user upload video functionality
 // const uploadWidget = cloudinary.createUploadWidget(
 //   {
-//     cloudName: "robkondrat",
+//     cloudName: "heydanhey",
 //     tags: ["video"],
 //     resourceType: "video",
 //     multiple: false,
@@ -21,7 +22,8 @@ const cloudinaryButton = document.getElementById("cloudinary_button")
 //     uploadPreset: "tycwqdaj"
 //   },
 //   function(error, result) {
-//     if (!error && result.event === "success") {
+//     if (!error && result && result.event === "success") {
+//       console.log("Done! Here is the image info: ", result.info.url);
 //       video.src = result.info.url;
 //       console.log(result);
 //       let li = document.createElement("li");
@@ -37,10 +39,10 @@ const cloudinaryButton = document.getElementById("cloudinary_button")
 // );
 
 // function getVideos() {
-//   fetch("https://res.cloudinary.com/robkondrat/video/list/video.json")
+//   fetch("https://res.cloudinary.com/heydanhey/video/list/video.json")
 //     .then(response => response.json())
 //     .then(data => addVideos(data.resources));
-// };
+// }
 
 // function addVideos(videos) {
 //   console.log(videos);
@@ -48,18 +50,18 @@ const cloudinaryButton = document.getElementById("cloudinary_button")
 //     let li = document.createElement("li");
 //     li.innerHTML = video.created_at;
 //     const att = document.createAttribute("id");
-//     att.value = `https://res.cloudinary.com/robkondrat/video/upload/v${video.version}/${video.public_id}.${video.format}`;
+//     att.value = `https://res.cloudinary.com/heydanhey/video/upload/v${video.version}/${video.public_id}.${video.format}`;
 //     li.setAttributeNode(att);
 //     li.addEventListener("click", loadVideo);
 //     list.appendChild(li);
 //   });
-// };
+// }
 
 // function loadVideo(event) {
 //   video.src = event.target.id;
 //   video.play();
 //   console.log(event);
-// };
+// }
 
 // JS 30 functions
 function togglePlay() {
@@ -107,6 +109,93 @@ function toggleFullscreen() {
   };
 };
 
+// function getVideo() {
+//   navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+//     .then(localMediaStream => {
+//       console.log(localMediaStream);
+    
+// //  DEPRECIATION : 
+// //       The following has been depreceated by major browsers as of Chrome and Firefox.
+// //       video.src = window.URL.createObjectURL(localMediaStream);
+// //       Please refer to these:
+// //       Deprecated  - https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
+// //       Newer Syntax - https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/srcObject
+      
+//       video.srcObject = localMediaStream;
+//       video.play();
+//     })
+//     .catch(err => {
+//       console.error(`OH NO!!!`, err);
+//     });
+// }
+
+// function paintToCanvas() {
+//   const width = video.videoWidth;
+//   const height = video.videoHeight;
+//   canvas.width = width;
+//   canvas.height = height;
+
+//   return setInterval(() => {
+//     ctx.drawImage(video, 0, 0, width, height);
+//     // take the pixels out
+//     let pixels = ctx.getImageData(0, 0, width, height);
+//     // mess with them
+//     pixels = redEffect(pixels);
+
+//     // pixels = rgbSplit(pixels);
+//     // ctx.globalAlpha = 0.8;
+
+//     // pixels = greenScreen(pixels);
+//     // put them back
+//     ctx.putImageData(pixels, 0, 0);
+//   }, 16);
+// }
+
+// function redEffect(pixels) {
+//   for (let i = 0; i < pixels.data.length; i+=4) {
+//     pixels.data[i + 0] = pixels.data[i + 0] + 200; // RED
+//     pixels.data[i + 1] = pixels.data[i + 1] - 50; // GREEN
+//     pixels.data[i + 2] = pixels.data[i + 2] * 0.5; // Blue
+//   }
+//   return pixels;
+// }
+
+// function rgbSplit(pixels) {
+//   for (let i = 0; i < pixels.data.length; i+=4) {
+//     pixels.data[i - 150] = pixels.data[i + 0]; // RED
+//     pixels.data[i + 500] = pixels.data[i + 1]; // GREEN
+//     pixels.data[i - 550] = pixels.data[i + 2]; // Blue
+//   }
+//   return pixels;
+// }
+
+// function greenScreen(pixels) {
+//   const levels = {};
+
+//   document.querySelectorAll('.rgb input').forEach((input) => {
+//     levels[input.name] = input.value;
+//   });
+
+//   for (i = 0; i < pixels.data.length; i = i + 4) {
+//     red = pixels.data[i + 0];
+//     green = pixels.data[i + 1];
+//     blue = pixels.data[i + 2];
+//     alpha = pixels.data[i + 3];
+
+//     if (red >= levels.rmin
+//       && green >= levels.gmin
+//       && blue >= levels.bmin
+//       && red <= levels.rmax
+//       && green <= levels.gmax
+//       && blue <= levels.bmax) {
+//       // take it out!
+//       pixels.data[i + 3] = 0;
+//     }
+//   }
+
+//   return pixels;
+// }
+
 
 
 video.addEventListener('click', togglePlay);
@@ -114,6 +203,7 @@ video.addEventListener('play', updateButton);
 video.addEventListener('pause', updateButton);
 video.addEventListener('timeupdate', handleProgress);
 fullscreen.addEventListener('click', toggleFullscreen);
+// video.addEventListener('canplay', paintToCanvas);
 
 
 toggle.addEventListener('click', togglePlay);
@@ -172,5 +262,7 @@ recognition.addEventListener('result', e => {
 
 
 });
+
+// getVideo();
 
 recognition.start();

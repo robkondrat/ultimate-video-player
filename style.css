@@ -6,6 +6,25 @@ html {
   box-sizing: inherit;
 }
 
+.photo {
+  width: 100%;
+  float: left;
+}
+
+.photobooth {
+  background: white;
+  max-width: 150rem;
+  margin: 2rem auto;
+  border-radius: 2px;
+}
+
+/*clearfix*/
+.photobooth:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -26,6 +45,8 @@ body {
   font-size: 0;
   overflow: hidden;
 }
+
+
 
 /* This css is only applied when fullscreen is active. */
 .player:fullscreen {
