@@ -2,8 +2,8 @@ window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogn
 
 const player = document.querySelector('.player');
 const video = player.querySelector('.viewer');
-// const canvas = document.querySelector('.photo');
-// const ctx = canvas.getContext('2d');
+const canvas = document.querySelector('.photo');
+const ctx = canvas.getContext('2d');
 const progress = player.querySelector('.progress');
 const progressBar = player.querySelector('.progress__filled');
 const toggle = player.querySelector('.toggle');
@@ -77,8 +77,13 @@ function updateButton() {
   toggle.textContent = icon;
 };
 
-function skip() {
-  video.currentTime += parseFloat(this.dataset.skip);
+function skip(e, skipValue=null) {
+  console.log(e, skipValue);
+  if (skipValue) {
+    video.currentTime += skipValue;
+  } else {
+    video.currentTime += parseFloat(this.dataset.skip);
+  };
 };
 
 function handleRangeUpdate() {
@@ -129,81 +134,50 @@ function toggleFullscreen() {
 //     });
 // }
 
-// function paintToCanvas() {
-//   const width = video.videoWidth;
-//   const height = video.videoHeight;
-//   canvas.width = width;
-//   canvas.height = height;
+function paintToCanvas() {
+  const width = video.videoWidth;
+  const height = video.videoHeight;
+  canvas.width = width;
+  canvas.height = height;
 
-//   return setInterval(() => {
-//     ctx.drawImage(video, 0, 0, width, height);
-//     // take the pixels out
-//     let pixels = ctx.getImageData(0, 0, width, height);
-//     // mess with them
-//     pixels = redEffect(pixels);
+  return setInterval(() => {
+    ctx.drawImage(video, 0, 0, width, height);
+    // take the pixels out
+    let pixels = ctx.getImageData(0, 0, width, height);
+    // mess with them
+    pixels = redEffect(pixels);
 
-//     // pixels = rgbSplit(pixels);
-//     // ctx.globalAlpha = 0.8;
+    pixels = rgbSplit(pixels);
+    ctx.globalAlpha = 0.8;
 
-//     // pixels = greenScreen(pixels);
-//     // put them back
-//     ctx.putImageData(pixels, 0, 0);
-//   }, 16);
-// }
+    ctx.putImageData(pixels, 0, 0);
+  }, 50);
+}
 
-// function redEffect(pixels) {
-//   for (let i = 0; i < pixels.data.length; i+=4) {
-//     pixels.data[i + 0] = pixels.data[i + 0] + 200; // RED
-//     pixels.data[i + 1] = pixels.data[i + 1] - 50; // GREEN
-//     pixels.data[i + 2] = pixels.data[i + 2] * 0.5; // Blue
-//   }
-//   return pixels;
-// }
+function redEffect(pixels) {
+  for (let i = 0; i < pixels.data.length; i+=4) {
+    pixels.data[i + 0] = pixels.data[i + 0] + 200; // RED
+    pixels.data[i + 1] = pixels.data[i + 1] - 50; // GREEN
+    pixels.data[i + 2] = pixels.data[i + 2] * 0.5; // Blue
+  }
+  return pixels;
+}
 
-// function rgbSplit(pixels) {
-//   for (let i = 0; i < pixels.data.length; i+=4) {
-//     pixels.data[i - 150] = pixels.data[i + 0]; // RED
-//     pixels.data[i + 500] = pixels.data[i + 1]; // GREEN
-//     pixels.data[i - 550] = pixels.data[i + 2]; // Blue
-//   }
-//   return pixels;
-// }
-
-// function greenScreen(pixels) {
-//   const levels = {};
-
-//   document.querySelectorAll('.rgb input').forEach((input) => {
-//     levels[input.name] = input.value;
-//   });
-
-//   for (i = 0; i < pixels.data.length; i = i + 4) {
-//     red = pixels.data[i + 0];
-//     green = pixels.data[i + 1];
-//     blue = pixels.data[i + 2];
-//     alpha = pixels.data[i + 3];
-
-//     if (red >= levels.rmin
-//       && green >= levels.gmin
-//       && blue >= levels.bmin
-//       && red <= levels.rmax
-//       && green <= levels.gmax
-//       && blue <= levels.bmax) {
-//       // take it out!
-//       pixels.data[i + 3] = 0;
-//     }
-//   }
-
-//   return pixels;
-// }
-
-
+function rgbSplit(pixels) {
+  for (let i = 0; i < pixels.data.length; i+=4) {
+    pixels.data[i - 150] = pixels.data[i + 0]; // RED
+    pixels.data[i + 500] = pixels.data[i + 1]; // GREEN
+    pixels.data[i - 550] = pixels.data[i + 2]; // Blue
+  }
+  return pixels;
+}
 
 video.addEventListener('click', togglePlay);
 video.addEventListener('play', updateButton);
 video.addEventListener('pause', updateButton);
 video.addEventListener('timeupdate', handleProgress);
 fullscreen.addEventListener('click', toggleFullscreen);
-// video.addEventListener('canplay', paintToCanvas);
+video.addEventListener('canplay', paintToCanvas);
 
 
 toggle.addEventListener('click', togglePlay);
@@ -245,7 +219,7 @@ function voiceControl(transcript) {
   };
   const skipAheadCommand = 'skip ahead';
   if (transcript.includes(skipAheadCommand)) {
-    skip();
+    skip(null, 25);
   };
 }
 
